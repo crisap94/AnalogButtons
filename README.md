@@ -1,4 +1,4 @@
-AnalogButtons [![Build Status](https://travis-ci.org/crisap94/AnalogButtons.svg?branch=master)](https://travis-ci.org/crisap94/AnalogButtons)
+ArrayButtons [![Build Status](https://travis-ci.org/crisap94/ArrayButtons.svg?branch=master)](https://travis-ci.org/crisap94/ArrayButtons)
 =============
 
 In order to reduce the number of pins used by some projects, sketches can use this library to wire multiple buttons to one single analog pin.
@@ -7,7 +7,7 @@ You can register a call-back function which gets called when a button is pressed
 
 Minimum hold duration (time that must elapse before a button is considered being held) and hold interval (time that must elapse between each activation of the hold function) can both be configured.
 
-By default max number of buttons per pin is limited to 8 to limit memory consumption, but it can be controlled defining the `ANALOGBUTTONS_MAX_SIZE` macro ***before*** including this library.
+By default max number of buttons per pin is limited to 8 to limit memory consumption, but it can be controlled defining the `ARRAYBUTTONS_MAX_SIZE` macro ***before*** including this library.
 
 This work is largely inspired by the AnalogButtons library available in the Arduino Playground library collection, but it represents a substantial improvement in terms of code organization as each operation is going to be defined in a separate function removing the need to determine (through `if` or `switch` statements) which button has been pressed/held.
 
@@ -38,7 +38,7 @@ In its simplest form, a button definition resemble something like the following 
 void aButtonClick() {
   // do something
 }
-Button aButton = Button(512, &aButtonClick);
+Button aButton(512, &aButtonClick);
 ```
 
 In its most evoluted form a button definition looks like the following.
@@ -51,7 +51,7 @@ void aButtonClick() {
 void aButtonHold() {
   // do something else
 }
-Button aButton = Button(512, &aButtonClick, &aButtonHold, 5000, 50);
+Button aButton(512, &aButtonClick, &aButtonHold, 5000, 50);
 ```
 
 
@@ -65,7 +65,7 @@ Because buttons will share the same analog pin some configuration is required in
 
 ```
 int8_t margin = 20;
-AnalogButtons analogButtons = AnalogButtons(A2,margin);
+ArrayButtons analogButtons = ArrayButtons(A2,margin);
 ```
 
 3. Setup
@@ -74,8 +74,8 @@ AnalogButtons analogButtons = AnalogButtons(A2,margin);
 Once you have everything defined you need to link everything up, more than probably within your `setup()` function:
 
 ```
-analogButtons.add(aButton);
-analogButtons.add(anotherButton);
+arrayButtons.add(aButton);
+arrayButtons.add(anotherButton);
 ```
 
 
@@ -85,5 +85,5 @@ analogButtons.add(anotherButton);
 Now all you need is to periodically activate the analog buttons verification which checks the analog pin to determine if one of the many possible conditions occurred and fires the corresponding code. The following code goes into the `loop()` function and needs to be executed fast so don't introduce any `delay(...)` otherwise it will not work as expected:
 
 ```
-analogButtons.check();
+arrayButtons.check();
 ```
